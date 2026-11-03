@@ -2,6 +2,8 @@
 
 A lightweight, framework-free application tracker. It works as a local HTML page and can be published directly with GitHub Pages.
 
+The page has two sections: the main application Kanban uses `applications.json`, while **LUH Professors & Projects** uses `luh.json` to track reviewed topics, professor outreach, replies, and follow-ups without mixing them into formal job statistics.
+
 ## Open locally
 
 Double-click `index.html`. In local file mode, the page uses its built-in starter snapshot because browsers normally block automatic reading of a neighboring JSON file.

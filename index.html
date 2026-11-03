@@ -40,6 +40,10 @@
     h1 { margin: 0; font-size: clamp(28px, 4vw, 44px); line-height: 1.08; letter-spacing: -.035em; }
     .subtitle { margin: 10px 0 0; max-width: 700px; color: var(--muted); }
     .actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .view-tabs { display: inline-flex; gap: 5px; margin: 0 0 20px; padding: 5px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+    .view-tab { border: 0; border-radius: 8px; padding: 9px 14px; background: transparent; color: var(--muted); font-weight: 800; }
+    .view-tab.active { background: var(--accent); color: #fff; }
+    .view[hidden] { display: none; }
     .button {
       min-height: 40px;
       border: 1px solid var(--line);
@@ -98,6 +102,7 @@
     .tag-row { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
     .tag { border-radius: 99px; padding: 3px 7px; background: #f0f3f6; color: #4d5964; font-size: 11px; }
     .tag.networking { background: #f2eefe; color: #6747aa; }
+    .tag.status { background: var(--accent-soft); color: #2852a3; }
     .next { margin: 10px 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; }
     .next strong { display: block; margin-bottom: 2px; color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
     details { margin-top: 10px; font-size: 12px; }
@@ -144,31 +149,56 @@
       </div>
     </header>
 
-    <section class="summary" aria-label="Application summary" id="summary"></section>
+    <nav class="view-tabs" aria-label="Board sections">
+      <button class="view-tab active" type="button" data-view="applications">Applications</button>
+      <button class="view-tab" type="button" data-view="luh">LUH Professors &amp; Projects</button>
+    </nav>
 
-    <section class="toolbar" aria-label="Filters">
-      <input class="control search" id="searchInput" type="search" placeholder="Search organization, role, focus, notes…" aria-label="Search applications">
-      <select class="control" id="cityFilter" aria-label="Filter by city"><option value="">All cities</option></select>
-      <select class="control" id="categoryFilter" aria-label="Filter by category"><option value="">All types</option></select>
-      <select class="control" id="statusFilter" aria-label="Filter by status"><option value="">All statuses</option></select>
-      <select class="control" id="sortSelect" aria-label="Sort applications">
-        <option value="priority">Priority: high first</option>
-        <option value="recent">Most recent activity</option>
-        <option value="organization">Organization A–Z</option>
-      </select>
-    </section>
+    <div class="view" id="applicationsView">
+      <section class="summary" aria-label="Application summary" id="summary"></section>
 
-    <p class="notice" id="notice" role="status"></p>
-    <section class="board" id="board" aria-label="Kanban board"></section>
+      <section class="toolbar" aria-label="Filters">
+        <input class="control search" id="searchInput" type="search" placeholder="Search organization, role, focus, notes…" aria-label="Search applications">
+        <select class="control" id="cityFilter" aria-label="Filter by city"><option value="">All cities</option></select>
+        <select class="control" id="categoryFilter" aria-label="Filter by category"><option value="">All types</option></select>
+        <select class="control" id="statusFilter" aria-label="Filter by status"><option value="">All statuses</option></select>
+        <select class="control" id="sortSelect" aria-label="Sort applications">
+          <option value="priority">Priority: high first</option>
+          <option value="recent">Most recent activity</option>
+          <option value="organization">Organization A–Z</option>
+        </select>
+      </section>
 
-    <footer class="footer">
-      <div class="legend" aria-label="Priority legend">
-        <span><i style="background:#b23a3a"></i> High</span>
-        <span><i style="background:#a56400"></i> Medium</span>
-        <span><i style="background:#16835f"></i> Low</span>
-      </div>
-      <div id="sourceInfo">Loading data…</div>
-    </footer>
+      <p class="notice" id="notice" role="status"></p>
+      <section class="board" id="board" aria-label="Application Kanban board"></section>
+
+      <footer class="footer">
+        <div class="legend" aria-label="Priority legend">
+          <span><i style="background:#b23a3a"></i> High</span>
+          <span><i style="background:#a56400"></i> Medium</span>
+          <span><i style="background:#16835f"></i> Low</span>
+        </div>
+        <div id="sourceInfo">Loading data…</div>
+      </footer>
+    </div>
+
+    <div class="view" id="luhView" hidden>
+      <section class="summary" aria-label="LUH outreach summary" id="luhSummary"></section>
+
+      <section class="toolbar" aria-label="LUH filters">
+        <input class="control search" id="luhSearchInput" type="search" placeholder="Search professor, institute, project, focus…" aria-label="Search LUH records">
+        <select class="control" id="luhInstituteFilter" aria-label="Filter by institute"><option value="">All institutes</option></select>
+        <select class="control" id="luhStatusFilter" aria-label="Filter LUH status"><option value="">All statuses</option></select>
+      </section>
+
+      <p class="notice" id="luhNotice" role="status"></p>
+      <section class="board" id="luhBoard" aria-label="LUH professors and projects board"></section>
+
+      <footer class="footer">
+        <div>Public-safe summaries only · email addresses and private message text are not stored</div>
+        <div id="luhSourceInfo">Loading LUH data…</div>
+      </footer>
+    </div>
   </main>
 
   <script id="fallbackData" type="application/json">
@@ -305,12 +335,122 @@
 ]
   </script>
 
+  <script id="luhFallbackData" type="application/json">
+[
+  {
+    "id": "imes-external-masterarbeit-robot-learning",
+    "institute": "imes",
+    "contact_person": "Prof. Thomas Seel · Dennis Bank",
+    "title": "External Masterarbeit · Robot Learning",
+    "technical_focus": [
+      "Robot Learning",
+      "Flow Matching",
+      "Sim-to-Real"
+    ],
+    "status": "Replied",
+    "reviewed_date": "2026-10-19",
+    "first_contact": "2026-10-19",
+    "last_contact": "2026-10-20",
+    "next_action": "Follow up directly with Dennis Bank about suitable Robot Learning topics and cooperation requirements.",
+    "project_link": "https://www.imes.uni-hannover.de/institut/team/",
+    "notes": "Thomas Seel confirmed that an external thesis is possible when the company or Fraunhofer institute has serious cooperation interest. Dennis Bank was added in CC as the Robot Learning contact.",
+    "priority": "High",
+    "evidence": "Confirmed from prior conversation; original message was not found in the connected Gmail account."
+  },
+  {
+    "id": "tnt-external-masterarbeit-ml-cv",
+    "institute": "TNT",
+    "contact_person": "Prof. Bernt Rosenhahn",
+    "title": "External Masterarbeit · Machine Learning / Computer Vision",
+    "technical_focus": [
+      "Machine Learning",
+      "Computer Vision",
+      "Generative Models"
+    ],
+    "status": "Reviewed",
+    "reviewed_date": "2026-10-20",
+    "first_contact": "",
+    "last_contact": "",
+    "next_action": "Confirm whether the prepared email was sent; if not, contact the relevant TNT researcher or use the student-project form.",
+    "project_link": "https://www.tnt.uni-hannover.de/students/",
+    "notes": "TNT permits external theses when the topic fits its expertise, an external supervisor provides a concrete task description, and a cooperation agreement can be arranged.",
+    "priority": "High",
+    "evidence": "Email draft and professor fit were reviewed in a prior conversation; sending is not confirmed."
+  },
+  {
+    "id": "ikg-external-masterarbeit-applied-ai",
+    "institute": "IKG",
+    "contact_person": "Prof. Monika Sester",
+    "title": "External Masterarbeit · Applied AI / Spatial Data",
+    "technical_focus": [
+      "Applied AI",
+      "Spatial Data",
+      "Computer Vision"
+    ],
+    "status": "Reviewed",
+    "reviewed_date": "2026-10-20",
+    "first_contact": "",
+    "last_contact": "",
+    "next_action": "Confirm whether the prepared email was sent and refine the topic toward IKG research before contacting.",
+    "project_link": "https://www.ikg.uni-hannover.de/sester/",
+    "notes": "A tailored external-thesis inquiry was prepared. The connected Gmail account contains no matching sent message, so contact is not marked as confirmed.",
+    "priority": "Medium",
+    "evidence": "Email draft found in prior conversation; sending is not confirmed."
+  },
+  {
+    "id": "ifw-ai-3d-cad-feature-recognition",
+    "institute": "IFW",
+    "contact_person": "Marcus Nein",
+    "title": "AI recognition of geometric features in 3D-CAD data",
+    "technical_focus": [
+      "3D CAD",
+      "STEP",
+      "PyTorch",
+      "Feature Recognition"
+    ],
+    "status": "Reviewed",
+    "reviewed_date": "2026-10-20",
+    "first_contact": "",
+    "last_contact": "",
+    "next_action": "Decide whether the manufacturing/CAD focus is attractive enough to contact IFW.",
+    "project_link": "https://www.maschinenbau.uni-hannover.de/schwarzes-brett/schwarzes-brett-details/news/studentische-hilfskraft-oder-abschlussarbeit-erkennung-geometrischer-features-in-3d-cad-daten-step-mit-ki",
+    "notes": "Student-assistant or thesis topic for automated detection of pockets, holes, and other geometric features in STEP files using rule-based or ML methods.",
+    "priority": "Medium",
+    "evidence": "Project was discussed in a prior LUH thesis search and remains available on the official LUH page."
+  },
+  {
+    "id": "imes-unitree-g1-humanoid-learning",
+    "institute": "imes",
+    "contact_person": "Dennis Bank",
+    "title": "Humanoid robot learning with Unitree G1",
+    "technical_focus": [
+      "Humanoid Robotics",
+      "Robot Learning",
+      "Unitree G1"
+    ],
+    "status": "Discovered",
+    "reviewed_date": "2026-11-04",
+    "first_contact": "",
+    "last_contact": "",
+    "next_action": "Ask Dennis Bank whether a Masterarbeit topic can connect to the humanoid learning environment.",
+    "project_link": "https://www.imes.uni-hannover.de/forschung/arbeitsgruppe-robotic-systems/forschungsprojekte/detail",
+    "notes": "Newly found while reconstructing the LUH board. imes uses two Unitree G1 robots to capture regional industrial use cases and train autonomous execution.",
+    "priority": "High",
+    "evidence": "Official imes project page; not treated as previously reviewed by the user."
+  }
+]
+  </script>
+
   <script>
     const columns = ["Found", "Applied", "Waiting", "Interview", "Closed"];
     const summaryStatuses = ["Applied", "Waiting", "Interview", "Rejected", "Offer"];
+    const luhColumns = ["Discovered", "Reviewed", "Contacted", "Replied", "Follow-up"];
+    const luhSummaryStatuses = ["Discovered", "Reviewed", "Contacted", "Replied"];
     const priorityRank = { High: 0, Medium: 1, Low: 2 };
     let applications = [];
+    let luhRecords = [];
     let sourceLabel = "";
+    let luhSourceLabel = "";
 
     const els = {
       board: document.querySelector("#board"),
@@ -322,7 +462,14 @@
       sort: document.querySelector("#sortSelect"),
       notice: document.querySelector("#notice"),
       sourceInfo: document.querySelector("#sourceInfo"),
-      file: document.querySelector("#fileInput")
+      file: document.querySelector("#fileInput"),
+      luhBoard: document.querySelector("#luhBoard"),
+      luhSummary: document.querySelector("#luhSummary"),
+      luhSearch: document.querySelector("#luhSearchInput"),
+      luhInstitute: document.querySelector("#luhInstituteFilter"),
+      luhStatus: document.querySelector("#luhStatusFilter"),
+      luhNotice: document.querySelector("#luhNotice"),
+      luhSourceInfo: document.querySelector("#luhSourceInfo")
     };
 
     const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({
@@ -358,6 +505,33 @@
       render();
     }
 
+    function normalizeLuh(item, index) {
+      return {
+        id: item.id || `luh-record-${index + 1}`,
+        institute: item.institute || "LUH",
+        contact_person: item.contact_person || "",
+        title: item.title || "Untitled LUH opportunity",
+        technical_focus: Array.isArray(item.technical_focus) ? item.technical_focus : [],
+        status: item.status || "Discovered",
+        reviewed_date: item.reviewed_date || "",
+        first_contact: item.first_contact || "",
+        last_contact: item.last_contact || "",
+        next_action: item.next_action || "",
+        project_link: item.project_link || "",
+        notes: item.notes || "",
+        priority: item.priority || "Medium",
+        evidence: item.evidence || ""
+      };
+    }
+
+    function validateAndSetLuh(data, label) {
+      if (!Array.isArray(data)) throw new Error("The LUH JSON root must be an array.");
+      luhRecords = data.map(normalizeLuh);
+      luhSourceLabel = label;
+      populateLuhFilters();
+      renderLuh();
+    }
+
     function showNotice(message) {
       els.notice.textContent = message;
       els.notice.classList.add("visible");
@@ -389,6 +563,11 @@
       populateSelect(els.status, applications.map(item => item.status));
     }
 
+    function populateLuhFilters() {
+      populateSelect(els.luhInstitute, luhRecords.map(item => item.institute));
+      populateSelect(els.luhStatus, luhRecords.map(item => item.status));
+    }
+
     function getVisibleItems() {
       const query = els.search.value.trim().toLowerCase();
       const searchable = item => [item.organization, item.city, item.title, item.category,
@@ -413,6 +592,16 @@
     function boardColumn(status) {
       return ["Rejected", "Offer", "Closed"].includes(status) ? "Closed" :
         columns.includes(status) ? status : "Found";
+    }
+
+    function getVisibleLuhItems() {
+      const query = els.luhSearch.value.trim().toLowerCase();
+      return luhRecords.filter(item => {
+        const text = [item.institute, item.contact_person, item.title, item.technical_focus.join(" "), item.notes, item.next_action].join(" ").toLowerCase();
+        return (!query || text.includes(query)) &&
+          (!els.luhInstitute.value || item.institute === els.luhInstitute.value) &&
+          (!els.luhStatus.value || item.status === els.luhStatus.value);
+      }).sort((a, b) => (priorityRank[a.priority] ?? 9) - (priorityRank[b.priority] ?? 9) || a.institute.localeCompare(b.institute));
     }
 
     function renderSummary() {
@@ -444,6 +633,26 @@
       </article>`;
     }
 
+    function luhCardTemplate(item) {
+      const tags = item.technical_focus.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join("");
+      const link = /^https?:\/\//i.test(item.project_link) ? `<a href="${escapeHtml(item.project_link)}" target="_blank" rel="noopener noreferrer">Official page ↗</a>` : "—";
+      return `<article class="card">
+        <div class="card-top"><p class="org">${escapeHtml(item.institute)}</p><span class="priority ${escapeHtml(item.priority.toLowerCase())}" title="${escapeHtml(item.priority)} priority"></span></div>
+        <h3 class="title">${escapeHtml(item.title)}</h3>
+        <div class="meta"><span>${escapeHtml(item.contact_person || "No contact yet")}</span></div>
+        <div class="tag-row"><span class="tag status">${escapeHtml(item.status)}</span>${tags}</div>
+        ${item.next_action ? `<p class="next"><strong>Next action</strong>${escapeHtml(item.next_action)}</p>` : ""}
+        <details><summary>Evidence &amp; details</summary><div class="details-grid">
+          <span><b>Reviewed:</b> ${escapeHtml(item.reviewed_date || "unknown")}</span>
+          <span><b>First contact:</b> ${escapeHtml(item.first_contact || "not confirmed")}</span>
+          <span><b>Last contact:</b> ${escapeHtml(item.last_contact || "—")}</span>
+          <span><b>Notes:</b> ${escapeHtml(item.notes || "—")}</span>
+          <span><b>Evidence:</b> ${escapeHtml(item.evidence || "—")}</span>
+          <span><b>Link:</b> ${link}</span>
+        </div></details>
+      </article>`;
+    }
+
     function render() {
       renderSummary();
       const visible = getVisibleItems();
@@ -453,6 +662,20 @@
           <div class="cards">${items.length ? items.map(cardTemplate).join("") : `<div class="empty">No matching records</div>`}</div></section>`;
       }).join("");
       els.sourceInfo.textContent = `${applications.length} records · ${sourceLabel}`;
+    }
+
+    function renderLuh() {
+      els.luhSummary.innerHTML = luhSummaryStatuses.map(status => {
+        const count = luhRecords.filter(item => item.status === status).length;
+        return `<article class="metric"><span class="metric-label">${status}</span><strong class="metric-value">${count}</strong></article>`;
+      }).join("");
+      const visible = getVisibleLuhItems();
+      els.luhBoard.innerHTML = luhColumns.map(column => {
+        const items = visible.filter(item => item.status === column);
+        return `<section class="column"><header class="column-head"><h2 class="column-title">${column}</h2><span class="count">${items.length}</span></header>
+          <div class="cards">${items.length ? items.map(luhCardTemplate).join("") : `<div class="empty">No matching records</div>`}</div></section>`;
+      }).join("");
+      els.luhSourceInfo.textContent = `${luhRecords.length} LUH records · ${luhSourceLabel}`;
     }
 
     async function loadSource() {
@@ -468,8 +691,31 @@
       }
     }
 
+    async function loadLuhSource() {
+      els.luhNotice.classList.remove("visible");
+      try {
+        const response = await fetch("luh.json", { cache: "no-store" });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        validateAndSetLuh(await response.json(), "luh.json");
+      } catch (error) {
+        const fallback = JSON.parse(document.querySelector("#luhFallbackData").textContent);
+        validateAndSetLuh(fallback, "built-in snapshot");
+        els.luhNotice.textContent = "Local file mode: the LUH section uses its built-in snapshot. Open the GitHub Pages site for automatic updates.";
+        els.luhNotice.classList.add("visible");
+      }
+    }
+
     [els.search, els.city, els.category, els.status, els.sort].forEach(control =>
       control.addEventListener(control === els.search ? "input" : "change", render));
+
+    [els.luhSearch, els.luhInstitute, els.luhStatus].forEach(control =>
+      control.addEventListener(control === els.luhSearch ? "input" : "change", renderLuh));
+
+    document.querySelectorAll(".view-tab").forEach(button => button.addEventListener("click", () => {
+      document.querySelectorAll(".view-tab").forEach(tab => tab.classList.toggle("active", tab === button));
+      document.querySelector("#applicationsView").hidden = button.dataset.view !== "applications";
+      document.querySelector("#luhView").hidden = button.dataset.view !== "luh";
+    }));
 
     els.file.addEventListener("change", async event => {
       const file = event.target.files[0];
@@ -493,8 +739,8 @@
       URL.revokeObjectURL(url);
     });
 
-    document.querySelector("#resetButton").addEventListener("click", loadSource);
-    loadSource();
+    document.querySelector("#resetButton").addEventListener("click", () => Promise.all([loadSource(), loadLuhSource()]));
+    Promise.all([loadSource(), loadLuhSource()]);
   </script>
 </body>
 </html>
