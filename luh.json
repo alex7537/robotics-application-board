@@ -4,7 +4,11 @@
     "institute": "imes",
     "contact_person": "Prof. Thomas Seel · Dennis Bank",
     "title": "External Masterarbeit · Robot Learning",
-    "technical_focus": ["Robot Learning", "Flow Matching", "Sim-to-Real"],
+    "technical_focus": [
+      "Robot Learning",
+      "Flow Matching",
+      "Sim-to-Real"
+    ],
     "status": "Replied",
     "reviewed_date": "2026-10-19",
     "first_contact": "2026-10-19",
@@ -20,7 +24,11 @@
     "institute": "TNT",
     "contact_person": "Prof. Bernt Rosenhahn",
     "title": "External Masterarbeit · Machine Learning / Computer Vision",
-    "technical_focus": ["Machine Learning", "Computer Vision", "Generative Models"],
+    "technical_focus": [
+      "Machine Learning",
+      "Computer Vision",
+      "Generative Models"
+    ],
     "status": "Reviewed",
     "reviewed_date": "2026-10-20",
     "first_contact": "",
@@ -34,25 +42,36 @@
   {
     "id": "ikg-external-masterarbeit-applied-ai",
     "institute": "IKG",
-    "contact_person": "Prof. Monika Sester",
-    "title": "External Masterarbeit · Applied AI / Spatial Data",
-    "technical_focus": ["Applied AI", "Spatial Data", "Computer Vision"],
-    "status": "Reviewed",
+    "contact_person": "Yiming Xu",
+    "title": "External Masterarbeit · Flow Matching / World Action Models",
+    "technical_focus": [
+      "Flow Matching",
+      "Robot Control",
+      "World Action Models",
+      "Autonomous Driving",
+      "Wan 2.2"
+    ],
+    "status": "Replied",
     "reviewed_date": "2026-10-20",
     "first_contact": "",
-    "last_contact": "",
-    "next_action": "Confirm whether the prepared email was sent and refine the topic toward IKG research before contacting.",
-    "project_link": "https://www.ikg.uni-hannover.de/sester/",
-    "notes": "A tailored external-thesis inquiry was prepared. The connected Gmail account contains no matching sent message, so contact is not marked as confirmed.",
+    "last_contact": "2026-11-06",
+    "next_action": "Prepare a short presentation and brief thank-you; wait for Yiming Xu to suggest a meeting time after his vacation ends on 2026-11-10, without proactively pressing for a date.",
+    "project_link": "https://www.ikg.uni-hannover.de/",
+    "notes": "Yiming Xu expressed interest in the user's Flow Matching work for robot control. He is developing a Wan 2.2-based World Action Model for autonomous driving and invited a short presentation; a meeting will be arranged after his vacation.",
     "priority": "Medium",
-    "evidence": "Email draft found in prior conversation; sending is not confirmed."
+    "evidence": "Confirmed by Yiming Xu's reply dated 2026-11-06; summarized without private email text."
   },
   {
     "id": "ifw-ai-3d-cad-feature-recognition",
     "institute": "IFW",
     "contact_person": "Marcus Nein",
     "title": "AI recognition of geometric features in 3D-CAD data",
-    "technical_focus": ["3D CAD", "STEP", "PyTorch", "Feature Recognition"],
+    "technical_focus": [
+      "3D CAD",
+      "STEP",
+      "PyTorch",
+      "Feature Recognition"
+    ],
     "status": "Reviewed",
     "reviewed_date": "2026-10-20",
     "first_contact": "",
@@ -68,7 +87,11 @@
     "institute": "imes",
     "contact_person": "Dennis Bank",
     "title": "Humanoid robot learning with Unitree G1",
-    "technical_focus": ["Humanoid Robotics", "Robot Learning", "Unitree G1"],
+    "technical_focus": [
+      "Humanoid Robotics",
+      "Robot Learning",
+      "Unitree G1"
+    ],
     "status": "Discovered",
     "reviewed_date": "2026-11-04",
     "first_contact": "",
